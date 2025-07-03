@@ -3,10 +3,16 @@ title: "LA Education"
 execute: 
   echo: false
   messages: false
+  warning: false
 ---
 
 
 ```{r}
+Sys.setenv(VROOM_SHOW_PROGRESS = "false")
+options(cli.progress_show_after = Inf)
+options(tigris_use_cache = TRUE)
+options(tigris_progress = FALSE)
+
 library(tidycensus)
 library(tidyverse)
 library(leaflet)
