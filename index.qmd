@@ -1,0 +1,86 @@
+---
+title: "LA Education"
+execute: 
+  echo: false
+  messages: false
+---
+
+
+```{r}
+library(tidycensus)
+library(tidyverse)
+library(leaflet)
+library(sf)
+
+# Get ACS data
+edu_data <- get_acs(
+  geography = "tract",
+  variables = c(total = "B15003_001", bachelors = "B15003_022"),
+  year = 2022,
+  survey = "acs5",
+  state = "CA",
+  county = "Los Angeles",
+  geometry = TRUE,
+  output = "wide"
+)
+
+# Calculate % with bachelor's degree
+edu_data <- edu_data |>
+  mutate(pct_bachelors = 100 * bachelorsE / totalE)
+
+# Create color palette
+pal <- colorNumeric(
+  palette = "Blues",
+  domain = edu_data$pct_bachelors,
+  na.color = "transparent"
+)
+
+# Create the map
+leaflet(edu_data) |>
+  addProviderTiles("CartoDB.Positron") |>
+  addPolygons(
+    fillColor = ~pal(pct_bachelors),
+    weight = 0.5,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 2,
+      color = "#666",
+      fillOpacity = 0.9,
+      bringToFront = TRUE
+    ),
+    label = ~paste0(
+      "Census Tract: ", GEOID, "<br>",
+      "Bachelor's Degree: ", round(pct_bachelors, 1), "%"
+    ) |> lapply(htmltools::HTML),
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "13px",
+      direction = "auto"
+    )
+  ) |>
+  addLegend(
+    pal = pal,
+    values = ~pct_bachelors,
+    opacity = 0.7,
+    title = "Bachelor's Degree (%)",
+    position = "bottomright"
+  ) |>
+  # Add title as overlay control
+  addControl(
+    html = "<div style='text-align:center; font-size:18px; font-weight:bold;'>Bachelor's Degree Rates in Los Angeles County</div>",
+    position = "topright"
+  ) |>
+  # Add subtitle
+  addControl(
+    html = "<div style='text-align:center; font-size:14px;'>% of Adults Aged 25+ with at Least a Bachelor's Degree (ACS 2022)</div>",
+    position = "topright"
+  ) |>
+  # Add source
+  addControl(
+    html = "<div style='text-align:center; font-size:11px; color:gray;'>Source: U.S. Census Bureau, ACS 5-Year Estimates</div>",
+    position = "bottomleft"
+  )
+```
