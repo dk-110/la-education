@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "LA Education",
+    "section": "",
+    "text": "This interactive map visualizes the percentage of adults aged 25 and older with at least a bachelor’s degree across census tracts in Los Angeles County, based on data from the U.S. Census Bureau’s 2022 American Community Survey (ACS). Each tract is shaded using a blue color scale, where darker shades represent higher educational attainment. Users can hover over individual tracts to see detailed percentages and census tract identifiers. The map provides an engaging way to explore spatial disparities in higher education across the region and can help identify communities with notably high or low levels of bachelor’s degree attainment. The visualization integrates ACS data with leaflet mapping to present complex geographic and demographic data in a user-friendly format."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This plot was designed using Chatgpt."
+  }
+]
